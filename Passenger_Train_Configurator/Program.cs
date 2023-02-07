@@ -125,7 +125,7 @@ namespace Passenger_Train_Configurator
                 Wagon newWagon = new Wagon(random);
                 Console.WriteLine($"Перед вам вагон вместительностью {newWagon.Capacity} мест. Нажмите любую клавишу, чтобы присоединить его к поезду:");
                 Console.ReadKey();
-                _passengers.TakeThePlaces(newWagon);
+                _passengers.TakePlaces(newWagon);
                 _train.Add(newWagon);
                 Console.WriteLine("Вагон успешно присоединён к поезду");
                 Console.ReadKey();
@@ -171,7 +171,7 @@ namespace Passenger_Train_Configurator
 
         public int Quantity { get; private set; }
 
-        public int TakeThePlaces(Wagon wagon)
+        public int TakePlaces(Wagon wagon)
         {
             if (Quantity > 0)
             {
