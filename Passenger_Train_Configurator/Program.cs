@@ -141,7 +141,7 @@ namespace Passenger_Train_Configurator
             _passengers= null;
         }
 
-        public void TakePlaces(Wagon wagon, Passenger passengers)
+        private void TakePlaces(Wagon wagon, Passenger passengers)
         {
             int passengersQuantity = passengers.Quantity;
 
