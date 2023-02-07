@@ -146,7 +146,9 @@ namespace Passenger_Train_Configurator
     {
         public Wagon(Random random)
         {
-            Capacity = random.Next(10, 20);
+            int minCapacity = 10;
+            int maxCapacity = 20;
+            Capacity = random.Next(minCapacity, maxCapacity);
         }
 
         public int Capacity { get; private set; }
@@ -166,7 +168,9 @@ namespace Passenger_Train_Configurator
     {
         public Passenger(Random passengersCount)
         {
-            Quantity = passengersCount.Next(20, 100);
+            int minPassengersCount = 20;
+            int maxPassengersCount = 100;
+            Quantity = passengersCount.Next(minPassengersCount, maxPassengersCount);
         }
 
         public int Quantity { get; private set; }
