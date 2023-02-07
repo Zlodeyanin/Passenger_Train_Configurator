@@ -10,39 +10,45 @@ namespace Passenger_Train_Configurator
     {
         static void Main(string[] args)
         {
+            const string CommandCreateDirection = "1";
+            const string CommandSellTickets = "2";
+            const string CommandCreateTrain = "3";
+            const string CommandSentTrain = "4";
+            const string CommandExit = "5";
+
             bool isWork = true;
             Train newTrain = new Train();
 
             while (isWork)
             {
-                Console.WriteLine("Добро пожаловать в конфигуратор пассажирских поездов!\n");
+                Console.WriteLine($"Добро пожаловать в конфигуратор пассажирских поездов!\n");
                 newTrain.ShowInfo();
-                Console.WriteLine("\nВведите 1 чтобы создать направление");
-                Console.WriteLine("Введите 2 чтобы продать билеты");
-                Console.WriteLine("Введите 3 чтобы сформировать поезд");
-                Console.WriteLine("Введите 4 чтобы отправить поезд");
-                Console.WriteLine("Введите 5 чтобы завершить работу");
+                Console.WriteLine($"\nВведите {CommandCreateDirection} чтобы создать направление");
+                Console.WriteLine($"Введите {CommandSellTickets} чтобы продать билеты");
+                Console.WriteLine($"Введите {CommandCreateTrain} чтобы сформировать поезд");
+                Console.WriteLine($"Введите {CommandSentTrain} чтобы отправить поезд");
+                Console.WriteLine($"Введите {CommandExit} чтобы завершить работу");
                 string userInput = Console.ReadLine();
 
                 switch (userInput)
                 {
-                    case "1":
+                    case CommandCreateDirection:
                         newTrain.CreateDirection();
                         break;
 
-                    case "2":
+                    case CommandSellTickets:
                         newTrain.SellTickets();
                         break;
 
-                    case "3":
+                    case CommandCreateTrain:
                         newTrain.Create();
                         break;
 
-                    case "4":
+                    case CommandSentTrain:
                         newTrain.Sent();
                         break;
 
-                    case "5":
+                    case CommandExit:
                         Console.WriteLine("Завершение работы!");
                         isWork = false;
                         break;
