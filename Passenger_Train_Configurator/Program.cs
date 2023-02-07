@@ -125,7 +125,7 @@ namespace Passenger_Train_Configurator
                 Wagon newWagon = new Wagon(random);
                 Console.WriteLine($"Перед вам вагон вместительностью {newWagon.Capacity} мест. Нажмите любую клавишу, чтобы присоединить его к поезду:");
                 Console.ReadKey();
-                _passengers.TakePlaces(newWagon);
+                TakePlaces(newWagon,_passengers);
                 _train.Add(newWagon);
                 Console.WriteLine("Вагон успешно присоединён к поезду");
                 Console.ReadKey();
@@ -139,6 +139,28 @@ namespace Passenger_Train_Configurator
             _train.Clear();
             _direction= null;
             _passengers= null;
+        }
+
+        public void TakePlaces(Wagon wagon, Passenger passengers)
+        {
+            int passengersQuantity = passengers.Quantity;
+
+            if(passengersQuantity > 0)
+            {
+                if(passengersQuantity > wagon.Capacity)
+                {
+                    passengersQuantity -= wagon.Capacity;
+                    passengers.FixQuantity(passengersQuantity);
+                }
+                else
+                {
+                    passengers.ZeroizeQuantity();
+                }
+            }
+            else
+            {
+                passengers.ZeroizeQuantity();
+            }
         }
     }
 
@@ -175,24 +197,14 @@ namespace Passenger_Train_Configurator
 
         public int Quantity { get; private set; }
 
-        public int TakePlaces(Wagon wagon)
+        public void FixQuantity(int newQuantity)
         {
-            if (Quantity > 0)
-            {
-                if (Quantity > wagon.Capacity)
-                {
-                    return Quantity -= wagon.Capacity;
+            Quantity= newQuantity;
+        }
 
-                }
-                else
-                {
-                    return Quantity = 0;
-                }
-            }
-            else
-            {
-                return Quantity = 0;
-            }
+        public void ZeroizeQuantity()
+        {
+            Quantity= 0;
         }
     }
 }
