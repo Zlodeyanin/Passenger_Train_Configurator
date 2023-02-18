@@ -17,12 +17,14 @@ namespace Passenger_Train_Configurator
             const string CommandExit = "5";
 
             bool isWork = true;
-            Train newTrain = new Train();
+            Train train = new Train();
+            Dispatcher dispatcher = new Dispatcher();
 
             while (isWork)
             {
                 Console.WriteLine($"Добро пожаловать в конфигуратор пассажирских поездов!\n");
-                newTrain.ShowInfo();
+                dispatcher.ShowInfo();
+                train.ShowInfo();
                 Console.WriteLine($"\nВведите {CommandCreateDirection} чтобы создать направление");
                 Console.WriteLine($"Введите {CommandSellTickets} чтобы продать билеты");
                 Console.WriteLine($"Введите {CommandCreateTrain} чтобы сформировать поезд");
@@ -33,19 +35,19 @@ namespace Passenger_Train_Configurator
                 switch (userInput)
                 {
                     case CommandCreateDirection:
-                        newTrain.CreateDirection();
+                        dispatcher.CreateDirection();
                         break;
 
                     case CommandSellTickets:
-                        newTrain.SellTickets();
+                        dispatcher.SellTickets();
                         break;
 
                     case CommandCreateTrain:
-                        newTrain.Create();
+                        train.Create(dispatcher);
                         break;
 
                     case CommandSentTrain:
-                        newTrain.Sent();
+                        train.Sent(dispatcher);
                         break;
 
                     case CommandExit:
@@ -67,35 +69,8 @@ namespace Passenger_Train_Configurator
     class Train
     {
         private List<Wagon> _train = new List<Wagon>();
-        private Direction _direction;
-        private Passenger _passengers;
-
-        public void CreateDirection()
-        {
-            if (_direction == null)
-            {
-                Console.WriteLine("Введите направление для нового поезда:");
-                _direction = new Direction(Console.ReadLine());
-            }
-            else
-            {
-                Console.WriteLine("Направление уже создано, можете продавать билеты!");
-            }
-        }
-
-        public void SellTickets()
-        {
-            if (_passengers == null)
-            {
-                Random random = new Random();
-                _passengers = new Passenger(random);
-                Console.WriteLine($"Билеты успешно проданы. Всего пассажиров, купивших билеты - {_passengers.Quantity}");
-            }
-            else
-            {
-                Console.WriteLine($"Вы уже продали билеты на направление {_direction.Name} . Сформируйте поезд!");
-            }
-        }
+        protected Direction _direction;
+        protected Tickets _tickets;
 
         public void ShowInfo()
         {
@@ -104,9 +79,9 @@ namespace Passenger_Train_Configurator
                 Console.WriteLine($"Текущее направление - {_direction.Name}.");
             }
 
-            if (_passengers != null)
+            if (_tickets != null)
             {
-                Console.WriteLine($"Колиство пассажиров не размещённых в поезде - {_passengers.Quantity}");
+                Console.WriteLine($"Колиство пассажиров не размещённых в поезде - {_tickets.Quantity}");
             }
 
             if (_train.Count > 0)
@@ -115,17 +90,18 @@ namespace Passenger_Train_Configurator
             }
         }
 
-        public void Create()
+        public void Create(Dispatcher dispatcher)
         {
             Random random = new Random();
 
-            while (_passengers.Quantity > 0)
+            while (dispatcher.Tiskets.Quantity > 0)
             {
+                dispatcher.ShowInfo();
                 ShowInfo();
                 Wagon newWagon = new Wagon(random);
                 Console.WriteLine($"Перед вам вагон вместительностью {newWagon.Capacity} мест. Нажмите любую клавишу, чтобы присоединить его к поезду:");
                 Console.ReadKey();
-                TakePlaces(newWagon,_passengers);
+                TakePlaces(newWagon, dispatcher.Tiskets);
                 _train.Add(newWagon);
                 Console.WriteLine("Вагон успешно присоединён к поезду");
                 Console.ReadKey();
@@ -133,15 +109,14 @@ namespace Passenger_Train_Configurator
             }
         }
 
-        public void Sent()
+        public void Sent(Dispatcher dispatcher)
         {
-            Console.WriteLine($"Поезд по направлению {_direction.Name} успешно отправлен! Можете создать новое направление.");
+            Console.WriteLine($"Поезд успешно отправлен! Можете создать новое направление.");
             _train.Clear();
-            _direction= null;
-            _passengers= null;
+            dispatcher.SentTrain();
         }
 
-        private void TakePlaces(Wagon wagon, Passenger passengers)
+        private void TakePlaces(Wagon wagon, Tickets passengers)
         {
             int passengersQuantity = passengers.Quantity;
 
@@ -186,9 +161,9 @@ namespace Passenger_Train_Configurator
         public string Name { get; private set; }
     }
 
-    class Passenger
+    class Tickets
     {
-        public Passenger(Random passengersCount)
+        public Tickets(Random passengersCount)
         {
             int minPassengersCount = 20;
             int maxPassengersCount = 100;
@@ -205,6 +180,59 @@ namespace Passenger_Train_Configurator
         public void ZeroizeQuantity()
         {
             Quantity= 0;
+        }
+    }
+
+    class Dispatcher
+    {
+        private Direction _direction;
+
+        public Tickets Tiskets { get; private set; }
+
+        public void CreateDirection()
+        {
+            if (_direction == null)
+            {
+                Console.WriteLine("Введите направление для нового поезда:");
+                _direction = new Direction(Console.ReadLine());
+            }
+            else
+            {
+                Console.WriteLine("Направление уже создано, можете продавать билеты!");
+            }
+        }
+
+        public void SellTickets()
+        {
+            if (Tiskets == null)
+            {
+                Random random = new Random();
+                Tiskets = new Tickets(random);
+                Console.WriteLine($"Билеты успешно проданы. Всего пассажиров, купивших билеты - {Tiskets.Quantity}");
+            }
+            else
+            {
+                Console.WriteLine($"Вы уже продали билеты на направление {_direction.Name} . Сформируйте поезд!");
+            }
+        }
+
+        public void ShowInfo()
+        {
+            if (_direction != null)
+            {
+                Console.WriteLine($"Текущее направление - {_direction.Name}.");
+            }
+
+            if (Tiskets != null)
+            {
+                Console.WriteLine($"Колиство пассажиров не размещённых в поезде - {Tiskets.Quantity}");
+            }
+        }
+
+        public void SentTrain()
+        {
+            _direction = null;
+            Tiskets = null;
         }
     }
 }
