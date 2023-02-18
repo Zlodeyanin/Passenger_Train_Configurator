@@ -69,21 +69,9 @@ namespace Passenger_Train_Configurator
     class Train
     {
         private List<Wagon> _train = new List<Wagon>();
-        protected Direction _direction;
-        protected Tickets _tickets;
 
         public void ShowInfo()
         {
-            if (_direction != null)
-            {
-                Console.WriteLine($"Текущее направление - {_direction.Name}.");
-            }
-
-            if (_tickets != null)
-            {
-                Console.WriteLine($"Колиство пассажиров не размещённых в поезде - {_tickets.Quantity}");
-            }
-
             if (_train.Count > 0)
             {
                 Console.WriteLine($"Количество присоединённых вагонов - {_train.Count}.");
